@@ -133,7 +133,7 @@ public class SmsListener extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    Log.w(TAG, "Got SMS broadcast..." + intent.getAction());
+    Log.w(TAG, "Got SMS broadcast... " + intent.getAction()+" and it's a challenge "+isChallenge(context, intent)+ " and it's relevant "+isRelevant(context, intent));
 
     if (intent.getAction().equals(SMS_RECEIVED_ACTION) && isChallenge(context, intent)) {
       Log.w(TAG, "Got challenge!");
@@ -143,6 +143,7 @@ public class SmsListener extends BroadcastReceiver {
 
       abortBroadcast();
     } else if (intent.getAction().equals(SMS_RECEIVED_ACTION) && isRelevant(context, intent)) {
+    	Log.w(TAG, "message is relevant, starting the SendReceiveService");
       Intent receivedIntent = new Intent(context, SendReceiveService.class);
       receivedIntent.setAction(SendReceiveService.RECEIVE_SMS_ACTION);
       receivedIntent.putExtra("ResultCode", this.getResultCode());
